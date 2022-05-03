@@ -1,6 +1,8 @@
 package com.kajetanwiacek.videosharingplatform.video;
 
 import com.kajetanwiacek.videosharingplatform.user.User;
+import com.kajetanwiacek.videosharingplatform.video.model.Video;
+import com.kajetanwiacek.videosharingplatform.video.model.VideoUploadDto;
 import org.springframework.stereotype.Component;
 
 @Component

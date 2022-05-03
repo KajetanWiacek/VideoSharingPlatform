@@ -1,4 +1,4 @@
-package com.kajetanwiacek.videosharingplatform.video;
+package com.kajetanwiacek.videosharingplatform.video.model;
 
 import com.kajetanwiacek.videosharingplatform.user.User;
 import lombok.AllArgsConstructor;
@@ -6,7 +6,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -21,11 +23,6 @@ public class Video {
 
     @ManyToOne
     private User user;
-
-    private Integer likes;
-
-    @ElementCollection
-    private List<Comment> comments;
 
     @Embedded
     private Length length;

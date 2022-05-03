@@ -1,4 +1,4 @@
-package com.kajetanwiacek.videosharingplatform.video;
+package com.kajetanwiacek.videosharingplatform.video.model;
 
 public enum Category {
     MUSIC,

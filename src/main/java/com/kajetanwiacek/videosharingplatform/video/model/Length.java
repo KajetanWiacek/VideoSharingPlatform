@@ -1,4 +1,4 @@
-package com.kajetanwiacek.videosharingplatform.video;
+package com.kajetanwiacek.videosharingplatform.video.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

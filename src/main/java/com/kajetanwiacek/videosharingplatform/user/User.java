@@ -21,7 +21,7 @@ public class User {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
-    private String name;
+    private String username;
 
     public void encodePassword(PasswordEncoder passwordEncoder){
         password = passwordEncoder.encode(password);
