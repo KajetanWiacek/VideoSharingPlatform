@@ -79,4 +79,7 @@ public class VideoService {
         return stats.getUserIdLikes().size();
     }
 
+    public List<Video> getVideosFromCategory(Category category){
+        return videoRepository.getByCategory(category);
+    }
 }

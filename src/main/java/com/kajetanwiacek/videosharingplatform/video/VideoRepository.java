@@ -11,4 +11,5 @@ import java.util.List;
 @Repository
 public interface VideoRepository extends JpaRepository<Video,Long> {
     List<Video> getByUser(User user);
+    List<Video> getByCategory(Category category);
 }

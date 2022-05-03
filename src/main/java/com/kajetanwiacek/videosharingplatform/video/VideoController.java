@@ -1,6 +1,7 @@
 package com.kajetanwiacek.videosharingplatform.video;
 
 import com.kajetanwiacek.videosharingplatform.user.UserService;
+import com.kajetanwiacek.videosharingplatform.video.model.Category;
 import com.kajetanwiacek.videosharingplatform.video.model.Comment;
 import com.kajetanwiacek.videosharingplatform.video.model.Video;
 import com.kajetanwiacek.videosharingplatform.video.model.VideoUploadDto;
@@ -68,5 +69,10 @@ public class VideoController {
     @GetMapping("{id}/like")
     public ResponseEntity<Integer> getLikesNumber(@PathVariable Long id){
         return new ResponseEntity<>(videoService.getLikes(id),HttpStatus.OK);
+    }
+
+    @GetMapping("/category")
+    public ResponseEntity<List<Video>> getCategoryVideos(@RequestParam Category category){
+        return new ResponseEntity<>(videoService.getVideosFromCategory(category),HttpStatus.OK);
     }
 }
