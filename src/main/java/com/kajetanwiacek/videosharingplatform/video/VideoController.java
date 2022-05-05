@@ -34,8 +34,8 @@ public class VideoController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Video>> getOtherUserVideos(@RequestParam String email){
-        return new ResponseEntity<>(videoService.getUserVideos(email),HttpStatus.OK);
+    public ResponseEntity<List<Video>> getOtherUserVideos(@RequestParam String username){
+        return new ResponseEntity<>(videoService.getOtherUserVideos(username),HttpStatus.OK);
     }
 
     @GetMapping("{id}")
@@ -62,8 +62,8 @@ public class VideoController {
 
     @PostMapping("{id}/like")
     public ResponseEntity<String> likeVideo(@PathVariable Long id, Principal principal){
-        videoService.likeVideo(id,principal.getName());
-        return new ResponseEntity<>("Video has been liked",HttpStatus.OK);
+        String answer = videoService.likeVideo(id,principal.getName());
+        return new ResponseEntity<>(answer,HttpStatus.OK);
     }
 
     @GetMapping("{id}/like")

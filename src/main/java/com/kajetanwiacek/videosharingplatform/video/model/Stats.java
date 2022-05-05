@@ -5,8 +5,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import javax.persistence.criteria.CriteriaBuilder;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
 
 @Getter
 @NoArgsConstructor
@@ -20,9 +21,23 @@ public class Stats {
     private Long videoId;
 
     @ElementCollection
-    private List<Long> userIdLikes;
+    private Set<Long> userIdLikes;
 
     public Stats(Long videoId) {
         this.videoId = videoId;
+        userIdLikes = new HashSet<>();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Stats stats = (Stats) o;
+        return Objects.equals(id, stats.id) && Objects.equals(videoId, stats.videoId) && Objects.equals(userIdLikes, stats.userIdLikes);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, videoId, userIdLikes);
     }
 }

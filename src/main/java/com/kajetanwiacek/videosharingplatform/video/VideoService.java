@@ -1,5 +1,6 @@
 package com.kajetanwiacek.videosharingplatform.video;
 
+import com.kajetanwiacek.videosharingplatform.exception.VideoNotFoundException;
 import com.kajetanwiacek.videosharingplatform.user.User;
 import com.kajetanwiacek.videosharingplatform.user.UserService;
 import com.kajetanwiacek.videosharingplatform.video.model.*;
@@ -37,8 +38,14 @@ public class VideoService {
         return videoRepository.getByUser(user);
     }
 
+    public List<Video> getOtherUserVideos(String username){
+        User user = userService.getUserByUsername(username);
+
+        return videoRepository.getByUser(user);
+    }
+
     public Video getVideo(Long id){
-        return videoRepository.findById(id).get();
+        return videoRepository.findById(id).orElseThrow(VideoNotFoundException::new);
     }
 
     public void addVideo(String email, VideoUploadDto videoUploadDto){
@@ -51,30 +58,37 @@ public class VideoService {
 
     public void commentVideo(Long videoId, String content, String email){
         User user = userService.getUser(email);
-        Video video = videoRepository.getById(videoId);
+        Video video = getVideo(videoId);
 
         commentRepository.save(new Comment(user.getId(),video.getId(), user.getUsername(),content));
     }
 
     public List<Comment> getVideoComments(Long videoId){
+        if(!videoRepository.existsById(videoId)){
+            throw new VideoNotFoundException();
+        }
         return commentRepository.getByVideoId(videoId);
     }
 
-    public void likeVideo(Long videoId, String email){
+    public String likeVideo(Long videoId, String email){
         User user = userService.getUser(email);
 
-        Stats stats = statsRepository.getById(videoId);
-        if(stats.getUserIdLikes().contains(user.getId())){
-            throw new IllegalStateException("zalikeowane juz");
-        }
-        statsRepository.getById(videoId).getUserIdLikes().add(user.getId());
+        Stats stats = statsRepository.findById(videoId).orElseThrow(VideoNotFoundException::new);
 
+        if(stats.getUserIdLikes().contains(user.getId())){
+            stats.getUserIdLikes().remove(user.getId());
+            statsRepository.save(stats);
+
+            return "Video unliked";
+        }
+        stats.getUserIdLikes().add(user.getId());
         statsRepository.save(stats);
+
+        return "Video liked";
     }
 
     public Integer getLikes(Long videoId){
-        Video video = videoRepository.getById(videoId);
-        Stats stats = statsRepository.getById(videoId);
+        Stats stats = statsRepository.findById(videoId).orElseThrow(VideoNotFoundException::new);
 
         return stats.getUserIdLikes().size();
     }
