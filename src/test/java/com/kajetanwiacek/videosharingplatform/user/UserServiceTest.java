@@ -1,48 +1,43 @@
 package com.kajetanwiacek.videosharingplatform.user;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
-@RunWith(MockitoJUnitRunner.class)
 public class UserServiceTest {
-    @Mock
-    UserRepository userRepository;
+  @MockBean UserRepository userRepository;
 
-    @Mock
-    PasswordEncoder passwordEncoder;
+  @MockBean PasswordEncoder passwordEncoder;
 
-    @InjectMocks
-    UserService userService;
+  @InjectMocks UserService userService;
 
-    private User user;
-    @Before
-    public void startUp(){
-        String password = passwordEncoder.encode("password");
-        user = new User(1L,"example@gmail.com",password,"username");
-    }
+  private User user;
 
-    @Test
-    public void addUser_shouldAddUser_whenValidData(){
-        when(userRepository.existsByEmail(user.getEmail())).thenReturn(false);
-        User userToAdd = new User(1L,"example@gmail.com","password","username");
+  @BeforeEach
+  public void startUp() {
+    String password = passwordEncoder.encode("password");
+    user = new User(1L, "example@gmail.com", password, "username");
+  }
 
-        userService.addUser(userToAdd);
-        ArgumentCaptor<User> argumentCaptor = ArgumentCaptor.forClass(User.class);
-        verify(userRepository).save(argumentCaptor.capture());
-        User savedUser = argumentCaptor.getValue();
+  @Test
+  public void addUser_shouldAddUser_whenValidData() {
+    when(userRepository.existsByEmail(user.getEmail())).thenReturn(false);
+    User userToAdd = new User(1L, "example@gmail.com", "password", "username");
 
-        Assert.assertEquals(user,savedUser);
-    }
+    userService.addUser(userToAdd);
+    ArgumentCaptor<User> argumentCaptor = ArgumentCaptor.forClass(User.class);
+    verify(userRepository).save(argumentCaptor.capture());
+    User savedUser = argumentCaptor.getValue();
+
+    Assertions.assertEquals(user, savedUser);
+  }
 }

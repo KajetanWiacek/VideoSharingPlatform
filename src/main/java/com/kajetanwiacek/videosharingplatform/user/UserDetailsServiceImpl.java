@@ -2,13 +2,11 @@ package com.kajetanwiacek.videosharingplatform.user;
 
 import com.kajetanwiacek.videosharingplatform.exception.UserEmailNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+
 import org.springframework.stereotype.Service;
 
 @Service
-public class UserDetailsServiceImpl implements UserDetailsService {
+public class UserDetailsServiceImpl{
     private final UserRepository userRepository;
 
     @Autowired
@@ -16,9 +14,4 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         this.userRepository = userRepository;
     }
 
-    @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        User user = userRepository.findByEmail(email).orElseThrow(() -> new UserEmailNotFoundException(email));
-        return UserDetailsImpl.create(user);
-    }
 }

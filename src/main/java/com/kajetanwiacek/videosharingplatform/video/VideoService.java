@@ -28,42 +28,42 @@ public class VideoService {
         this.statsRepository = statsRepository;
     }
 
-    public List<Video> getVideos(){
+    public List<VideoEntity> getVideos(){
         return videoRepository.findAll();
     }
 
-    public List<Video> getUserVideos(String email){
+    public List<VideoEntity> getUserVideos(String email){
         User user = userService.getUser(email);
 
         return videoRepository.getByUser(user);
     }
 
-    public List<Video> getOtherUserVideos(String username){
+    public List<VideoEntity> getOtherUserVideos(String username){
         User user = userService.getUserByUsername(username);
 
         return videoRepository.getByUser(user);
     }
 
-    public Video getVideo(Long id){
+    public VideoEntity getVideo(Long id){
         return videoRepository.findById(id).orElseThrow(VideoNotFoundException::new);
     }
 
     public void addVideo(String email, VideoUploadDto videoUploadDto){
         User user = userService.getUser(email);
-        Video video = videoMapper.toEntity(videoUploadDto,user);
+        VideoEntity videoEntity = videoMapper.toEntity(videoUploadDto,user);
 
-        videoRepository.save(video);
-        statsRepository.save(new Stats(video.getId()));
+        videoRepository.save(videoEntity);
+        statsRepository.save(new LikeVideoEntity(videoEntity.getId()));
     }
 
     public void commentVideo(Long videoId, String content, String email){
         User user = userService.getUser(email);
-        Video video = getVideo(videoId);
+        VideoEntity videoEntity = getVideo(videoId);
 
-        commentRepository.save(new Comment(user.getId(),video.getId(), user.getUsername(),content));
+        commentRepository.save(new CommentEntity(user.getId(), videoEntity.getId(), user.getUsername(),content));
     }
 
-    public List<Comment> getVideoComments(Long videoId){
+    public List<CommentEntity> getVideoComments(Long videoId){
         if(!videoRepository.existsById(videoId)){
             throw new VideoNotFoundException();
         }
@@ -73,27 +73,27 @@ public class VideoService {
     public String likeVideo(Long videoId, String email){
         User user = userService.getUser(email);
 
-        Stats stats = statsRepository.findById(videoId).orElseThrow(VideoNotFoundException::new);
+        LikeVideoEntity likeVideoEntity = statsRepository.findById(videoId).orElseThrow(VideoNotFoundException::new);
 
-        if(stats.getUserIdLikes().contains(user.getId())){
-            stats.getUserIdLikes().remove(user.getId());
-            statsRepository.save(stats);
+        if(likeVideoEntity.getUserIdLikes().contains(user.getId())){
+            likeVideoEntity.getUserIdLikes().remove(user.getId());
+            statsRepository.save(likeVideoEntity);
 
             return "Video unliked";
         }
-        stats.getUserIdLikes().add(user.getId());
-        statsRepository.save(stats);
+        likeVideoEntity.getUserIdLikes().add(user.getId());
+        statsRepository.save(likeVideoEntity);
 
         return "Video liked";
     }
 
     public Integer getLikes(Long videoId){
-        Stats stats = statsRepository.findById(videoId).orElseThrow(VideoNotFoundException::new);
+        LikeVideoEntity likeVideoEntity = statsRepository.findById(videoId).orElseThrow(VideoNotFoundException::new);
 
-        return stats.getUserIdLikes().size();
+        return likeVideoEntity.getUserIdLikes().size();
     }
 
-    public List<Video> getVideosFromCategory(Category category){
+    public List<VideoEntity> getVideosFromCategory(Category category){
         return videoRepository.getByCategory(category);
     }
 }
