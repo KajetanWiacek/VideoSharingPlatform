@@ -1,8 +1,9 @@
 package com.kajetanwiacek.videosharingplatform.video;
 
-import com.kajetanwiacek.videosharingplatform.video.model.CommentEntity;
-import com.kajetanwiacek.videosharingplatform.video.model.VideoEntity;
-import com.kajetanwiacek.videosharingplatform.video.model.VideoUploadDto;
+import com.kajetanwiacek.videosharingplatform.video.dto.VideoListView;
+import com.kajetanwiacek.videosharingplatform.video.dto.VideoUploadCommand;
+import com.kajetanwiacek.videosharingplatform.video.entity.CommentEntity;
+import com.kajetanwiacek.videosharingplatform.video.entity.VideoEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,13 +17,8 @@ public class VideoController {
   private final VideoService videoService;
 
   @GetMapping("/my")
-  public List<VideoEntity> getUserVideos(Principal principal) {
+  public List<VideoListView> getUserVideos(Principal principal) {
     return videoService.getUserVideos(principal.getName());
-  }
-
-  @GetMapping("/all")
-  public List<VideoEntity> getAllVideos() {
-    return videoService.getVideos();
   }
 
   @GetMapping
@@ -48,8 +44,9 @@ public class VideoController {
   }
 
   @PostMapping
-  public String uploadVideo(Principal principal, @RequestBody VideoUploadDto videoUploadDto) {
-    videoService.addVideo(principal.getName(), videoUploadDto);
+  public String uploadVideo(
+      Principal principal, @RequestBody VideoUploadCommand videoUploadCommand) {
+    videoService.addVideo(principal.getName(), videoUploadCommand);
     return "Video has been uploaded";
   }
 
@@ -63,8 +60,8 @@ public class VideoController {
     return videoService.getLikes(id);
   }
 
-  @GetMapping("/category")
-  public List<VideoEntity> getCategoryVideos(@RequestParam Category category) {
-    return videoService.getVideosFromCategory(category);
+  @GetMapping("/category/{categoryId}")
+  public List<VideoEntity> getCategoryVideos(@PathVariable Long categoryId) {
+    return videoService.getVideosFromCategory(categoryId);
   }
 }

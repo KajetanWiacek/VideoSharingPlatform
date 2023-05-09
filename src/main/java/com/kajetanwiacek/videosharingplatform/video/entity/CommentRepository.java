@@ -1,6 +1,6 @@
-package com.kajetanwiacek.videosharingplatform.video;
+package com.kajetanwiacek.videosharingplatform.video.entity;
 
-import com.kajetanwiacek.videosharingplatform.video.model.CommentEntity;
+import com.kajetanwiacek.videosharingplatform.video.entity.CommentEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

@@ -1,5 +1,6 @@
-package com.kajetanwiacek.videosharingplatform.video.model;
+package com.kajetanwiacek.videosharingplatform.video.entity;
 
+import com.kajetanwiacek.videosharingplatform.dictionary.category.DictionaryCategoryEntity;
 import com.kajetanwiacek.videosharingplatform.user.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -23,6 +24,10 @@ public class VideoEntity {
   @OneToOne private User user;
 
   private String quality;
+
+  private Long length;
+
+  private Long views;
 
   private DictionaryCategoryEntity dictionaryCategoryEntity;
 }

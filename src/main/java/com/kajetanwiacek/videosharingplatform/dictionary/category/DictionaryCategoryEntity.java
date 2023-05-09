@@ -1,4 +1,4 @@
-package com.kajetanwiacek.videosharingplatform.video.model;
+package com.kajetanwiacek.videosharingplatform.dictionary.category;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

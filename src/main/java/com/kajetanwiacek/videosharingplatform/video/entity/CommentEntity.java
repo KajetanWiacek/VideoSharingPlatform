@@ -1,4 +1,4 @@
-package com.kajetanwiacek.videosharingplatform.video.model;
+package com.kajetanwiacek.videosharingplatform.video.entity;
 
 import com.kajetanwiacek.videosharingplatform.user.User;
 import jakarta.persistence.*;
@@ -7,18 +7,24 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Table(name = "like_video_entity")
+import java.time.LocalDateTime;
+
+@Table(name = "comment")
 @Builder
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class LikeVideoEntity {
+public class CommentEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
+  @ManyToOne private User userEntity;
+
   @ManyToOne private VideoEntity videoEntity;
 
-  @OneToOne private User user;
+  private LocalDateTime createdDate;
+
+  private String content;
 }

@@ -2,7 +2,8 @@ package com.kajetanwiacek.videosharingplatform.video;
 
 import com.kajetanwiacek.videosharingplatform.user.User;
 import com.kajetanwiacek.videosharingplatform.user.UserService;
-import com.kajetanwiacek.videosharingplatform.video.model.*;
+import com.kajetanwiacek.videosharingplatform.video.dto.VideoUploadCommand;
+import com.kajetanwiacek.videosharingplatform.video.entity.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -31,7 +32,7 @@ class VideoEntityServiceTest {
   VideoService videoService;
 
   private User user;
-  private VideoUploadDto uploadDto;
+  private VideoUploadCommand uploadDto;
   private VideoEntity videoEntity;
   private CommentEntity commentEntity;
 
@@ -42,7 +43,7 @@ class VideoEntityServiceTest {
             videoRepository, userService, videoMapper, commentRepository, statsRepository);
     user = new User(1L, "example@gmail.com", "password", "user");
     Length length = new Length(1, 10, 5);
-    uploadDto = new VideoUploadDto("video", length, Quality.Q1080P, Category.ART);
+    uploadDto = new VideoUploadCommand("video", length, Quality.Q1080P, Category.ART);
     videoEntity = new VideoEntity(1L, "video", user, length, Quality.Q1080P, Category.ART);
     commentEntity = new CommentEntity(user.getId(), videoEntity.getId(), user.getUsername(), "content");
   }
@@ -50,7 +51,7 @@ class VideoEntityServiceTest {
   @Test
   void addVideo_shouldAddVideo_validDataGiven() {
     when(userService.getUser(user.getEmail())).thenReturn(user);
-    when(videoMapper.toEntity(uploadDto, user)).thenReturn(videoEntity);
+    when(videoMapper.map(uploadDto, user)).thenReturn(videoEntity);
 
     videoService.addVideo(user.getEmail(), uploadDto);
 
